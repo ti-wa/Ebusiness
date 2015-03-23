@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % adresse "(Plz, HausNr, Straße)">
+<!ENTITY % informationen "(Name, Email)">
+<!ENTITY elementAdresse SYSTEM "adressElement.dtd">
+<!ENTITY elementInformationen SYSTEM "elementInformationen.dtd">
+<!ELEMENT Bestellung (Betsellkopf, Bestellrumpf)>
+<!ELEMENT Betsellkopf (Besteller, Datum, Rechenadresse?, Lieferadresse+)>
+<!ELEMENT Besteller (Kunde, FirmenIdentifikationsnummer*)>
+<!ELEMENT Kunde (%informationen;)>
+<!ATTLIST FirmenIdentifikationsnummer FirmenID ID #REQUIRED>
+<!ELEMENT Datum (#PCDATA)>
+<!ELEMENT Rechenadresse (%adresse;)>
+<!ELEMENT Lieferadresse (%adresse;)>
+<!ELEMENT Bestellrumpf (Bestellpositionen+)>
+<!ATTLIST Bestellpositionen
+BestellpositionenID ID #REQUIRED>
+<!ELEMENT Bestellpositionen (Bestellnummer+, Bestellmenge, Kurzbeschreibung?, Lieferadresse)>
+<!ELEMENT Bestellnummer (#PCDATA)>
+<!ELEMENT Bestellmenge (#PCDATA)>
+<!ELEMENT Kurzbeschreibung (#PCDATA)>
+<!ATTLIST Lieferadresse LieferID IDREF #REQUIRED>
