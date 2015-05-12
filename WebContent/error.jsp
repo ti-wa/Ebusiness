@@ -4,6 +4,11 @@
 <br>
 <c:forEach var="error" items="${sessionScope.errorList}">
 <jsp:useBean id="error" type="java.lang.String" />
+<%if(error.contains("INFO")) {%>
+<b><font color="Green"><%= error %></font></b><br><br>
+<%}else{ %>
+<b><font color="Red"><%= error %></font></b><br><br>
+<%} %>
 <b><font color="Red"><%= error %></font></b><br><br>
 </c:forEach>
 
