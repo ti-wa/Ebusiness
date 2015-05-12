@@ -7,4 +7,10 @@
 		interface="de.htwg_konstanz.ebus.wholesaler.ws.order.OrderServicePortType"
 		implementation="de.htwg_konstanz.ebus.wholesaler.ws.order.OrderServiceImpl"
 		url-pattern="/OrderService" />
+		
+	<endpoint name="UpdateCatalog"
+		interface="de.htwg_konstanz.ebus.wholesaler.ws.MyWS.UpdateCatalogInterface"
+		implementation="de.htwg_konstanz.ebus.wholesaler.main.UpdateCatalogWS"
+		url-pattern="/UpdateCatalog" />
+		
 </endpoints>
