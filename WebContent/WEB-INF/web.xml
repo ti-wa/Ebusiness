@@ -39,7 +39,7 @@
 		<servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+	<!--  
 	<servlet>
 		<description>JAX-WS endpoint - UpdateCatalog</description>
 		<display-name>UpdateCatalog</display-name>
@@ -47,7 +47,7 @@
 		<servlet-class>com.sun.xml.ws.transport.http.servlet.WSServlet</servlet-class>
 		<load-on-startup>1</load-on-startup>
 	</servlet>
-	
+	-->
 	<servlet-mapping>
 		<servlet-name>OrderServicePort</servlet-name>
 		<url-pattern>/OrderService</url-pattern>
