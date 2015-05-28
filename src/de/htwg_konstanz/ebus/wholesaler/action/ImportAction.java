@@ -1,24 +1,33 @@
 package de.htwg_konstanz.ebus.wholesaler.action;
 
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.security.Security;
 import de.htwg_konstanz.ebus.wholesaler.demo.ControllerServlet;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.LoginBean;
+import de.htwg_konstanz.ebut.main.Upload;
 
-public class Import implements IAction {
+public class ImportAction implements IAction {
 
-	private static final String IMPORT = "import"; 
+	private static final String ACTION_IMPORT = "import"; 
 	public static final String PARAM_LOGIN_BEAN = "loginBean";
 	private static final String PARAM_PRODUCT_LIST = "productList";
+	
+	  /**
+     * Gets the Instanz of the Upload class.
+     */
+    private final Upload upload = new Upload();
 
-	public Import()
+	public ImportAction()
 	{
 		super();
 	}
@@ -46,10 +55,26 @@ public class Import implements IAction {
 			{
 				// find all available products and put it to the session
 				List<?> productList = ProductBOA.getInstance().findAll();
-				request.getSession(true).setAttribute(PARAM_PRODUCT_LIST, productList);					
+				request.getSession(true).setAttribute(PARAM_PRODUCT_LIST, productList);	
 			
-				// redirect to the product page
-				return "products.jsp";
+				//infos to UI
+				String message = "";
+				InputStream is;
+				
+				try{
+				if (ServletFileUpload.isMultipartContent(request)) {
+					is = upload.upload(request);
+					if(is == null){
+						message="?message=filename extension has to be xml";
+					}
+					
+				}
+				}catch(Exception e){}
+				
+				
+				
+				// redirect to the import page
+				return "import.jsp" + message;
 			}
 			else
 			{
@@ -68,7 +93,7 @@ public class Import implements IAction {
 
 @Override
 public boolean accepts(String actionName) {
-	return actionName.equalsIgnoreCase(IMPORT);
+	return actionName.equalsIgnoreCase(ACTION_IMPORT);
 }
 	
 }

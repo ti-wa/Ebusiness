@@ -14,6 +14,7 @@
 	<%@ include file="error.jsp" %>
 	<%@ include file="authentication.jsp" %>
 	<%@ include file="navigation.jspfragment" %>
+	<% String message = request.getParameter("message"); %>
 	<script type="text/javascript">
 		function validateUpload(){
 			if(document.getElementById("xmlFile").value !== ""){
@@ -30,5 +31,11 @@
 		<br>
 		<input type="button" value="Upload" onclick="validateUpload()"/>
 	</form>
+	</br>
+	<span class="error">
+	<% if (message != null) {
+                        out.write(message);
+       }%>
+    </span>
 </body>
 </html>

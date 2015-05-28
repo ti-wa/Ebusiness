@@ -77,6 +77,7 @@ public class ClassFinderUtil {
 							fileName.length() - 6);
 					try {
 						// Try to create an instance of the object
+						System.out.println("FoundCLassName: "+ foundClassName);
 						Object obj = Class.forName(
 								packageName + "." + foundClassName)
 								.newInstance();
@@ -102,5 +103,6 @@ public class ClassFinderUtil {
 
 	public static void main(String[] args) {
 		findAll("de.htwg_konstanz.ebus.wholesaler.demo", IAction.class);
+		findAll("de.htwg_konstanz.ebus.wholesaler.action", IAction.class);
 	}
 }
