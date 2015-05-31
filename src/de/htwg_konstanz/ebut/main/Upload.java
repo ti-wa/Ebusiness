@@ -48,8 +48,7 @@ public class Upload {
 			// check if file extension is xml is it not it will be aborted
 			extension = extension.toLowerCase();
 			if (extension.equals("xml")) {
-				System.out.println("Extension:" + extension);
-				System.out.println("\nFilename: " + fileName);
+				System.out.println("Filename: " + fileName);
 				// Converts the File into an Input Stream
 				InputStream is;
 				is = element.getInputStream();

@@ -18,6 +18,8 @@ import de.htwg_konstanz.ebus.framework.wholesaler.api.security.Security;
 import de.htwg_konstanz.ebus.wholesaler.demo.ControllerServlet;
 import de.htwg_konstanz.ebus.wholesaler.demo.IAction;
 import de.htwg_konstanz.ebus.wholesaler.demo.LoginBean;
+import de.htwg_konstanz.ebut.main.BmecatOperations;
+import de.htwg_konstanz.ebut.main.BmecatOperationsResult;
 import de.htwg_konstanz.ebut.main.Upload;
 import de.htwg_konstanz.ebut.main.XmlParser;
 
@@ -72,7 +74,6 @@ public class ImportAction implements IAction {
 				// infos to UI
 				String message = "";
 				InputStream is;
-
 				try {
 					if (ServletFileUpload.isMultipartContent(request)) {
 						is = upload.upload(request);
@@ -87,19 +88,33 @@ public class ImportAction implements IAction {
 							message = "?message=XML is not wellformed";
 							throw new XMLParseException();
 						}
-						if(!parser.isValidBmecat(xmlDom)){
+						if (!parser.isValidBmecat(xmlDom)) {
 							message = "?message=XML is not valid Bmecat ";
 							throw new XMLParseException();
 						}
-						
+						BmecatOperations bmecatoperations = new BmecatOperations();
+						BmecatOperationsResult result = bmecatoperations
+								.checkSupplierExist(xmlDom);
+						if (result.isSupplierListIsEmpty()) {
+							message = "?message=Supplier List is Empty";
+							throw new SupplierException();
+						}
+						if (!result.isSupplierExists()) {
+							message = "?message=" + result.getSuppliername()
+									+ " is missing in Supplierlist";
+							throw new SupplierException();
+						}
+
 					}
 				} catch (XMLParseException e) {
 					System.out.println("no valid XML");
+				} catch (SupplierException e) {
+					System.out.println("SupplierError");
 				} catch (ParserConfigurationException e) {
 					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
-				} catch (FileUploadException e){
+				} catch (FileUploadException e) {
 					e.printStackTrace();
 				}
 
@@ -122,4 +137,11 @@ public class ImportAction implements IAction {
 		return actionName.equalsIgnoreCase(ACTION_IMPORT);
 	}
 
+	/**
+	 * @author tim
+	 *	Exception to simplify code
+	 */
+	public class SupplierException extends Exception {
+		private static final long serialVersionUID = -8717517235010572406L;
+	}
 }
