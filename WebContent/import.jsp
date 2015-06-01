@@ -14,7 +14,6 @@
 	<%@ include file="error.jsp" %>
 	<%@ include file="authentication.jsp" %>
 	<%@ include file="navigation.jspfragment" %>
-	<% String message = request.getParameter("message"); %>
 	<script type="text/javascript">
 		function validateUpload(){
 			if(document.getElementById("xmlFile").value !== ""){
@@ -32,10 +31,25 @@
 		<input type="button" value="Upload" onclick="validateUpload()"/>
 	</form>
 	</br>
+	<c:forEach var="info" items="${sessionScope.info}">
+	<jsp:useBean id="info" type="java.lang.String" />
 	<span class="error">
-	<% if (message != null) {
-                        out.write(message);
-       }%>
+	<%= info %>
     </span>
+    </c:forEach>
+    <c:if test="${not empty sessionScope.missingProducts}">
+    </br>
+    Not Imported Products:
+    	<ul>
+    		<c:forEach var="product" items="${sessionScope.missingProducts}">
+			<jsp:useBean id="product" type="java.lang.String" />
+			<span class="error">
+				<li>
+					<%= product %>
+				</li>
+ 			   </span>
+  	 	 </c:forEach>
+  	  </ul>
+    </c:if>
 </body>
 </html>

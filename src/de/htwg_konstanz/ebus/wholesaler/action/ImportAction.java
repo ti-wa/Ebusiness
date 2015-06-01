@@ -3,11 +3,13 @@ package de.htwg_konstanz.ebus.wholesaler.action;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.management.modelmbean.XMLParseException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.commons.fileupload.FileUploadException;
@@ -71,40 +73,58 @@ public class ImportAction implements IAction {
 				request.getSession(true).setAttribute(PARAM_PRODUCT_LIST,
 						productList);
 
-				// infos to UI
-				String message = "";
+				
 				InputStream is;
+				org.w3c.dom.Document xmlDom;
+				// infos to Ui Lists
+				List<String> info = new ArrayList<String>();
+				List<String> missingProducts = new ArrayList<String>();
 				try {
 					if (ServletFileUpload.isMultipartContent(request)) {
 						is = upload.upload(request);
+						//filenamecheck
 						if (is == null) {
-							message = "?message=filename extension has to be xml";
+							info.add("filename extension has to be xml");
 							throw new XMLParseException();
 						}
 						XmlParser parser = new XmlParser();
-						org.w3c.dom.Document xmlDom;
+						
+						//welform check
 						xmlDom = parser.parseXML(is);
 						if (xmlDom == null) {
-							message = "?message=XML is not wellformed";
+							info.add("XML is not wellformed");
 							throw new XMLParseException();
 						}
+						//valid check
 						if (!parser.isValidBmecat(xmlDom)) {
-							message = "?message=XML is not valid Bmecat ";
+							info.add("XML is not valid Bmecat");
 							throw new XMLParseException();
 						}
-						BmecatOperations bmecatoperations = new BmecatOperations();
+						BmecatOperations bmecatoperations = BmecatOperations
+								.getInstance();
 						BmecatOperationsResult result = bmecatoperations
 								.checkSupplierExist(xmlDom);
+						//supplierlist emty check
 						if (result.isSupplierListIsEmpty()) {
-							message = "?message=Supplier List is Empty";
+							info.add("Supplier List is Empty");
 							throw new SupplierException();
 						}
+						//supplier missing check
 						if (!result.isSupplierExists()) {
-							message = "?message=" + result.getSuppliername()
-									+ " is missing in Supplierlist";
+							info.add(result.getSuppliername()
+									+ " is missing in Supplierlist");
 							throw new SupplierException();
 						}
-
+						//product import + result
+						result = bmecatoperations.writeXmlToDatabase(xmlDom);
+						if (result.getNonImportetProducts() != null) {
+							info.add("Not all products importet. Only: "
+									+ result.getProductCounter());
+							missingProducts = result.getNonImportetProducts();
+						} else {
+							info.add("All products importet. number: "
+									+ result.getProductCounter());
+						}
 					}
 				} catch (XMLParseException e) {
 					System.out.println("no valid XML");
@@ -117,9 +137,11 @@ public class ImportAction implements IAction {
 				} catch (FileUploadException e) {
 					e.printStackTrace();
 				}
-
+				HttpSession session = request.getSession();
+				session.setAttribute("info", info);
+				session.setAttribute("missingProducts", missingProducts);
 				// redirect to the import page
-				return "import.jsp" + message;
+				return "import.jsp";
 			} else {
 				// authorization failed -> show error message
 				errorList.add("You are not allowed to perform this action!");
@@ -138,8 +160,7 @@ public class ImportAction implements IAction {
 	}
 
 	/**
-	 * @author tim
-	 *	Exception to simplify code
+	 * @author tim Exception to simplify code
 	 */
 	public class SupplierException extends Exception {
 		private static final long serialVersionUID = -8717517235010572406L;

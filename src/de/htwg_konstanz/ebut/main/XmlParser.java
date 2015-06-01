@@ -32,7 +32,7 @@ import org.xml.sax.SAXException;
 public class XmlParser {
 	private final String PATHZUMWORKSPACE = "/Users/tim/workspace/";
 	/**
-	 * gets the dom for a XML-InputStream
+	 * gets the normalized dom for a XML-InputStream
 	 * 
 	 * @param InputStream
 	 *            InputStream (XML data)
@@ -46,11 +46,13 @@ public class XmlParser {
 		try {
 			DocumentBuilder db = dbf.newDocumentBuilder();
 			org.w3c.dom.Document document = db.parse(is);
+			document.getDocumentElement().normalize();
 			return document;
 		} catch (SAXException e) {
 			System.out.println("parse document error");
 			return null;
 		}
+		
 	}
 
 	/**
