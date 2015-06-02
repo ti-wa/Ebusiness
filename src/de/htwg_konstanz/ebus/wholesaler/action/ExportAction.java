@@ -1,12 +1,11 @@
 package de.htwg_konstanz.ebus.wholesaler.action;
 
-import java.io.IOException;
+
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.xml.parsers.ParserConfigurationException;
 
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.IBOUser;
@@ -52,7 +51,6 @@ public class ExportAction implements IAction {
 						e.printStackTrace();
 					}
 				}
-
 				return "export.jsp";
 			} else {
 				// authorization failed -> show error message
@@ -65,7 +63,6 @@ public class ExportAction implements IAction {
 			// redirect to the login page
 			return "login.jsp";
 		}
-
 	}
 
 	public boolean accepts(String actionName) {

@@ -36,6 +36,7 @@ public class BmecatExport {
 	 * used to filter object to a search pattern
 	 * 
 	 * @param search
+	 * @return list of products to export
 	 */
 	public Collection<BOProduct> filter(final String search) {
 		Collection<BOProduct> products;
@@ -53,14 +54,14 @@ public class BmecatExport {
 	/**
 	 * Generate Export OutputStream
 	 * 
-	 * @param action
-	 * @param response
-	 * @return
+	 * @param action XHTML or only Bmecat
+	 * @param response HHTP
+	 * @param list of products for export
 	 * @throws ParserConfigurationException
 	 * @throws IOException
 	 * @throws TransformerException
 	 */
-	public OutputStream export(final String action,
+	public void export(final String action,
 			final HttpServletResponse response,
 			final Collection<BOProduct> products)
 			throws ParserConfigurationException, IOException,
@@ -70,7 +71,7 @@ public class BmecatExport {
 		DocumentBuilder docBuilder = docFactory.newDocumentBuilder();
 		Document document = docBuilder.newDocument();
 		OutputStream out = response.getOutputStream();
-		document = generateDocument(document);
+		document = generateDocument(document, products);
 		Result result = new StreamResult(out);
 		Source source = new DOMSource(document);
 		// write dom to output stream
@@ -78,17 +79,16 @@ public class BmecatExport {
 				.newTransformer();
 		transformer.transform(source, result);
 		out.close();
-		return out;
 	}
 
-	private Document generateDocument(Document document) {
+	private Document generateDocument(Document document, final Collection<BOProduct> products) {
 		// create root element and prolog
 		Element root = document.createElement("BMECAT");
 		root.setAttribute("version", "1.2");
 		root.setAttribute("xmlns:xsi",
 				"http://www.w3.org/2001/XMLSchema-instance");
 
-		// crate elements
+		// create elements
 		Element header = document.createElement("HEADER");
 		Element catalog = document.createElement("CATALOG");
 		Element supplier = document.createElement("SUPPLIER");
@@ -117,6 +117,19 @@ public class BmecatExport {
 		catalog.appendChild(catalogName);
 		supplier.appendChild(supplierName);
 		root.appendChild(tNewCatalog);
+		
+		//add products to catalog
+		for(BOProduct product:products){
+			Element article = document.createElement("ARTICLE");
+            if (product.getOrderNumberCustomer() != null) {
+                Element supplierAid = document.createElement("SUPPLIER_AID");
+                supplierAid.appendChild(document.createTextNode(product.getOrderNumberCustomer()));
+                article.appendChild(supplierAid);
+            }
+            tNewCatalog.appendChild(article);
+            
+		}
+		
 		return document;
 	}
 
