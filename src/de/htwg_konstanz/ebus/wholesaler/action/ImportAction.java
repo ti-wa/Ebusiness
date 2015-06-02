@@ -3,7 +3,6 @@ package de.htwg_konstanz.ebus.wholesaler.action;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.management.modelmbean.XMLParseException;
@@ -72,7 +71,6 @@ public class ImportAction implements IAction {
 				List<?> productList = ProductBOA.getInstance().findAll();
 				request.getSession(true).setAttribute(PARAM_PRODUCT_LIST,
 						productList);
-
 				
 				InputStream is;
 				org.w3c.dom.Document xmlDom;
@@ -104,7 +102,7 @@ public class ImportAction implements IAction {
 								.getInstance();
 						BmecatOperationsResult result = bmecatoperations
 								.checkSupplierExist(xmlDom);
-						//supplierlist emty check
+						//supplierlist emtpy check
 						if (result.isSupplierListIsEmpty()) {
 							info.add("Supplier List is Empty");
 							throw new SupplierException();
