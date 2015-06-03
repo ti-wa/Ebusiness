@@ -118,7 +118,7 @@ public class ImportAction implements IAction {
 						//product import + result
 						result = bmecatoperations.writeXmlToDatabase(xmlDom);
 						if (result.getNonImportetProducts() != null) {
-							info.add("Not all products importet. Only: "
+							info.add("Not all products imported. Only: "
 									+ result.getProductCounter());
 							missingProducts = result.getNonImportetProducts();
 						} else {
