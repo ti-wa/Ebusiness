@@ -3,6 +3,7 @@ package de.htwg_konstanz.ebut.main;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.Collection;
+import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.xml.parsers.DocumentBuilder;
@@ -10,12 +11,13 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
+import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSalesPrice;
+import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.PriceBOA;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.boa.ProductBOA;
 
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -142,14 +144,64 @@ public class BmecatExport {
             }
     
             Element ean = document.createElement("EAN");
+            if (product.getOrderNumberCustomer().length() > 14) {
+                String s = product.getOrderNumberCustomer().trim().substring(0, 14);
+                ean.appendChild(document.createTextNode(s));
+            } else {
+                ean.appendChild(document.createTextNode(product.getOrderNumberCustomer()));
+            }
             articleDetails.appendChild(ean);
+            
+            Element orderUnit = document.createElement("ORDER_UNIT");
+            Element noCuPerOu = document.createElement("NO_CU_PER_OU");
+            orderUnit.appendChild(document.createTextNode("C62"));
+            noCuPerOu.appendChild(document.createTextNode("10"));
+            articleOrderDetails.appendChild(orderUnit);
+            articleOrderDetails.appendChild(noCuPerOu);
             
             
             tNewCatalog.appendChild(article);
             
-		}
+            // Price Details
+            List<BOSalesPrice> salesPrices = PriceBOA.getInstance().findSalesPrices(product);
+            Element priceDetails = document.createElement("ARTICLE_PRICE_DETAILS");
+          
+            for (BOSalesPrice salesPrice : salesPrices) {
+
+                // Create Price elements
+                Element articlePrice = document.createElement("ARTICLE_PRICE");
+                Element priceAmount = document.createElement("PRICE_AMOUNT");
+                Element currency = document.createElement("PRICE_CURRENCY");
+                Element tax = document.createElement("TAX");
+                Element priceTerritory = document.createElement("TERRITORY");
+
+                // Add the elements to the article prcie
+                articlePrice.appendChild(priceAmount);
+                articlePrice.appendChild(currency);
+                articlePrice.appendChild(tax);
+                articlePrice.appendChild(priceTerritory);
+
+                // set the Price Type
+                articlePrice.setAttribute("price_type", salesPrice.getPricetype());
+
+                // Set the values of the elements
+                priceAmount.appendChild(document.createTextNode(salesPrice.getAmount().toString()));
+                currency.appendChild(document.createTextNode(salesPrice.getCountry().getCurrency().getCode()));
+                tax.appendChild(document.createTextNode(salesPrice.getTaxrate().toString()));
+                priceTerritory.appendChild(document.createTextNode(salesPrice.getCountry().getIsocode()));
+
+                // add Price to the element Price details
+                priceDetails.appendChild(articlePrice);
+
+            }
+            // add all Prices to the Article
+            article.appendChild(priceDetails);
+            // add the article to the catalog
+            tNewCatalog.appendChild(article);
+        }
+            
+            
 		
 		return document;
 	}
-
 }

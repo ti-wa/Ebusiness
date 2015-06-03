@@ -1,11 +1,15 @@
 package de.htwg_konstanz.ebus.wholesaler.action;
 
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.xml.transform.Result;
+import javax.xml.transform.stream.StreamResult;
 
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOProduct;
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.IBOUser;
@@ -40,8 +44,10 @@ public class ExportAction implements IAction {
 					Security.ACTION_READ, Security.ACTION_READ)) {
 				Collection<BOProduct> products;
 				String action = (String) request.getParameter("view");
+				action = action.toLowerCase();
 				String search = (String) request.getParameter("search");
 				if (action != null) {
+					System.out.println(action);
 					BmecatExport bmecatexport = new BmecatExport();
 					products = bmecatexport.filter(search);
 					try {
@@ -51,6 +57,9 @@ public class ExportAction implements IAction {
 						e.printStackTrace();
 					}
 				}
+	
+
+			
 				return "export.jsp";
 			} else {
 				// authorization failed -> show error message

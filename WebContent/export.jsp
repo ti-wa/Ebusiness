@@ -29,28 +29,26 @@
 		<td>Whole Catalog</td>
 		<td><a href="<%= response.encodeURL("controllerservlet?action=export&view=BMECAT") %>">BMECAT</a> </td>
 		<td><a href="<%= response.encodeURL("controllerservlet?action=export&view=XHTML") %>">xhtml</a></td>
-		<td><a href="<%= response.encodeURL("controllerservlet?action=export&view=BMECAT&download=yes") %>">BMECAT</a> </td>
 	</tr>
 	<tr>
 	
-		<td>
-		<form id="searchForm" method="post" action="controllerservlet?action=export">
-			<input type="hidden" name="view" id="view"/>
-			<input type="hidden" name="download" id="download"/>
-			<input type="text" name="search"/>
-			
+		
+		<form id="searchForm" method="post" action=<%= response.encodeURL("controllerservlet?action=export&view=BMECAT") %>>
+			<input type="hidden" name="view" id="view" value="BMECAT"/>
+			<td><input type="text" name="search"/></td>
+			<td><button type="submit">BMECAT</button></td>
 		</form> 
-		</td>
-		<script>
-			function submitScript(view, download) {
-				document.getElementById("view").value = view;
-				document.getElementById("download").value = download;
-				document.getElementById("searchForm").submit();
-			}
-		</script>
-		<td><a onclick="submitScript('BMECAT');">BMECAT</a></td>
-		<td><a onclick="submitScript('XHTML');">xhtml</a></td>
-		<td><a onclick="submitScript('BMECAT','yes');">BMECAT</a></td>
+		
+	<tr>
+
+	</tr>
+		
+		<form id="searchForm" method="post" action=<%= response.encodeURL("controllerservlet?action=export&view=xhtml") %>>
+			<input type="hidden" name="view" id="view" value="xhtml"/>
+		<td>	<input type="text" name="search"/></td>
+		<td>	<button type="submit">XHTML</button></td>
+		</form> 
+		<
 	</tr>	
 </table>
 

@@ -108,6 +108,7 @@ public class BmecatOperations {
 				  System.out.println("DESCRIPTION_LONG: " +
 				 */
 				// set Product details to bo Object
+				
 				BOProduct product = new BOProduct();
 				product.setOrderNumberSupplier(supplier_Aid);
 				product.setOrderNumberCustomer(supplier_Aid);
