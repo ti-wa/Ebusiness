@@ -109,11 +109,8 @@ public class BmecatOperations {
 				 */
 				// set Product details to bo Object
 				BOProduct product = new BOProduct();
-				// Customer number unique
-				BOSupplier supplier= result.getBoSupplier();
-				String supplierNumber = supplier.getSupplierNumber();
 				product.setOrderNumberSupplier(supplier_Aid);
-				product.setOrderNumberCustomer(supplierNumber + "-"+supplier_Aid);
+				product.setOrderNumberCustomer(supplier_Aid);
 				product.setLongDescription(description_Long);
 				product.setLongDescription(description_Long);
 				product.setShortDescription(description_Short);
@@ -133,7 +130,7 @@ public class BmecatOperations {
 				ProductBOA.getInstance().saveOrUpdate(product);
 				productCounter++;
 
-				// Article price
+				// Article Price
 				NodeList priceNodes = articel
 						.getElementsByTagName("ARTICLE_PRICE");
 				for (int k = 0; k < priceNodes.getLength(); k++) {
