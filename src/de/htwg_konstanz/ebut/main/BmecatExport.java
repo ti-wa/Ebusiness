@@ -121,11 +121,30 @@ public class BmecatExport {
 		//add products to catalog
 		for(BOProduct product:products){
 			Element article = document.createElement("ARTICLE");
+			Element articleDetails = document.createElement("ARTICLE_DETAILS");
+			Element articleOrderDetails = document.createElement("ARTICLE_ORDER_DETAILS");
             if (product.getOrderNumberCustomer() != null) {
                 Element supplierAid = document.createElement("SUPPLIER_AID");
                 supplierAid.appendChild(document.createTextNode(product.getOrderNumberCustomer()));
                 article.appendChild(supplierAid);
             }
+			article.appendChild(articleDetails);
+			article.appendChild(articleOrderDetails);
+            if(null !=product.getShortDescriptionCustomer()){
+            	Element descriptionShort = document.createElement("DESCRIPTION_SHORT");
+            	descriptionShort.appendChild(document.createTextNode(product.getShortDescriptionCustomer()));
+            	articleDetails.appendChild(descriptionShort);
+            }
+            if(null != product.getLongDescriptionCustomer()){
+            	Element descriptionLong = document.createElement("DESCRIPTION_LONG");
+            	descriptionLong.appendChild(document.createTextNode(product.getShortDescriptionCustomer()));
+            	articleDetails.appendChild(descriptionLong);
+            }
+    
+            Element ean = document.createElement("EAN");
+            articleDetails.appendChild(ean);
+            
+            
             tNewCatalog.appendChild(article);
             
 		}
