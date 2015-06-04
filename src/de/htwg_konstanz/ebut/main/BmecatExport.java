@@ -23,7 +23,6 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Result;
 import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
@@ -261,7 +260,7 @@ public class BmecatExport {
 					.transform(xmlSource, outputTarget);
 			InputStream is = new ByteArrayInputStream(
 					outputStream.toByteArray());
-			//setings for transformation
+			//settings for transformation
 			transformer.setOutputProperty(OutputKeys.METHOD, "xml");
 			transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION,
 					"yes");

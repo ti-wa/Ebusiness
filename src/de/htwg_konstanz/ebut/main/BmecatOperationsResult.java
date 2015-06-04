@@ -6,8 +6,8 @@ import java.util.List;
 
 import de.htwg_konstanz.ebus.framework.wholesaler.api.bo.BOSupplier;
 
-/**
- * @author tim simple DTO Result Object
+/**simple DTO Result Object
+ * @author tim 
  */
 public class BmecatOperationsResult {
 	private boolean supplierExists = false;
