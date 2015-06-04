@@ -23,7 +23,6 @@
 	<tr>
 		<th>Kategorie</th>
 		<th colspan="2">View</th>
-		<th colspan="2">Download</th>
 	</tr>
 	<tr>
 		<td>Whole Catalog</td>
@@ -31,18 +30,13 @@
 		<td><a href="<%= response.encodeURL("controllerservlet?action=export&view=XHTML") %>">xhtml</a></td>
 	</tr>
 	<tr>
-	
-		
 		<form id="searchForm" method="post" action=<%= response.encodeURL("controllerservlet?action=export&view=BMECAT") %>>
 			<input type="hidden" name="view" id="view" value="BMECAT"/>
 			<td><input type="text" name="search"/></td>
 			<td><button type="submit">BMECAT</button></td>
 		</form> 
-		
 	<tr>
-
 	</tr>
-		
 		<form id="searchForm" method="post" action=<%= response.encodeURL("controllerservlet?action=export&view=xhtml") %>>
 			<input type="hidden" name="view" id="view" value="xhtml"/>
 		<td>	<input type="text" name="search"/></td>
@@ -51,10 +45,9 @@
 		<
 	</tr>	
 </table>
-
-
-<p>
-<input type=button name=go-back value=" back " onclick="javascript:history.back()">
-</p>
+	<p>
+		<input type=button name=go-back value=" back "
+			onclick="javascript:history.back()">
+	</p>
 </body>
 </html>

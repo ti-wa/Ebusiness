@@ -44,10 +44,9 @@ public class ExportAction implements IAction {
 					Security.ACTION_READ, Security.ACTION_READ)) {
 				Collection<BOProduct> products;
 				String action = (String) request.getParameter("view");
-				action = action.toLowerCase();
 				String search = (String) request.getParameter("search");
 				if (action != null) {
-					System.out.println(action);
+					action = action.toLowerCase();
 					BmecatExport bmecatexport = new BmecatExport();
 					products = bmecatexport.filter(search);
 					try {
@@ -56,10 +55,7 @@ public class ExportAction implements IAction {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-				}
-	
-
-			
+				}			
 				return "export.jsp";
 			} else {
 				// authorization failed -> show error message
