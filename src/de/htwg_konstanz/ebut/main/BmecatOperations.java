@@ -128,9 +128,9 @@ public class BmecatOperations {
 				product.setOrderNumberSupplier(supplier_Aid);
 				product.setOrderNumberCustomer(supplier_Aid);
 				product.setLongDescription(description_Long);
-				product.setLongDescription(description_Long);
+				product.setLongDescriptionCustomer(description_Long);
 				product.setShortDescription(description_Short);
-				product.setShortDescriptionCustomer(description_Long);
+				product.setShortDescriptionCustomer(description_Short);
 				product.setSupplier(result.getBoSupplier());
 				
 				// check if product is still in database
