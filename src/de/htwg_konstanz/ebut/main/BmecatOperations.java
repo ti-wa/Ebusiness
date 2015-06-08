@@ -93,22 +93,37 @@ public class BmecatOperations {
 				Element articel = (Element) articelNode;
 				supplier_Aid = articel.getElementsByTagName("SUPPLIER_AID")
 						.item(0).getFirstChild().getNodeValue();
-				description_Short = articel
-						.getElementsByTagName("DESCRIPTION_SHORT").item(0)
-						.getFirstChild().getNodeValue();
-				description_Long = articel
-						.getElementsByTagName("DESCRIPTION_LONG").item(0)
-						.getFirstChild().getNodeValue();
+
+				description_Short = "";
+				try {
+					if (null != articel
+							.getElementsByTagName("DESCRIPTION_SHORT").item(0)
+							.getFirstChild().getNodeValue()) {
+						description_Short = articel
+								.getElementsByTagName("DESCRIPTION_SHORT")
+								.item(0).getFirstChild().getNodeValue();
+					}
+				} catch (Exception e) {
+					System.out.println("Null in Description Short");
+				}
+
+				description_Long = "";
+				try {
+					description_Long = articel
+							.getElementsByTagName("DESCRIPTION_LONG").item(0)
+							.getFirstChild().getNodeValue();
+				} catch (Exception e) {
+					System.out.println("Null in Description Short");
+				}
 
 				/*
-				  System.out.println("-------------ARTICLE--------------");
-				  System.out.println("SUPPLIER_AID: " + supplier_Aid);
-				  System.out.println("DESCRIPTION_SHORT: " +
-				  description_Short); 
-				  System.out.println("DESCRIPTION_LONG: " +
+				 * System.out.println("-------------ARTICLE--------------");
+				 * System.out.println("SUPPLIER_AID: " + supplier_Aid);
+				 * System.out.println("DESCRIPTION_SHORT: " +
+				 * description_Short); System.out.println("DESCRIPTION_LONG: " +
 				 */
 				// set Product details to bo Object
-				
+
 				BOProduct product = new BOProduct();
 				product.setOrderNumberSupplier(supplier_Aid);
 				product.setOrderNumberCustomer(supplier_Aid);
@@ -117,6 +132,7 @@ public class BmecatOperations {
 				product.setShortDescription(description_Short);
 				product.setShortDescriptionCustomer(description_Long);
 				product.setSupplier(result.getBoSupplier());
+				
 				// check if product is still in database
 				BOProduct check = ProductBOA.getInstance()
 						.findByOrderNumberCustomer(
@@ -139,22 +155,22 @@ public class BmecatOperations {
 					if (priceNode.getNodeType() == Node.ELEMENT_NODE) {
 						Element price = (Element) priceNode;
 						/*
-						  System.out.println("--------- PRICE-----------:");
-						  System.out.println("PRICE_TYPE: " +
-						  price.getAttribute("price_type"));
-						  System.out.println("PRICE_AMOUNT: " +
-						  price.getElementsByTagName
-						  ("PRICE_AMOUNT").item(0).getFirstChild
-						  ().getNodeValue());
-						  System.out.println("PRICE_CURRENCY: " +
-						  price.getElementsByTagName
-						  ("PRICE_CURRENCY").item(0).getFirstChild
-						  ().getNodeValue()); System.out.println("TAX: " +
-						  price
-						  .getElementsByTagName("TAX").item(0).getFirstChild
-						  ().getNodeValue()); System.out.println("TERRITORY: "
-						  + price.getElementsByTagName("TERRITORY").item(0).
-						  getFirstChild().getNodeValue());
+						 * System.out.println("--------- PRICE-----------:");
+						 * System.out.println("PRICE_TYPE: " +
+						 * price.getAttribute("price_type"));
+						 * System.out.println("PRICE_AMOUNT: " +
+						 * price.getElementsByTagName
+						 * ("PRICE_AMOUNT").item(0).getFirstChild
+						 * ().getNodeValue());
+						 * System.out.println("PRICE_CURRENCY: " +
+						 * price.getElementsByTagName
+						 * ("PRICE_CURRENCY").item(0).getFirstChild
+						 * ().getNodeValue()); System.out.println("TAX: " +
+						 * price
+						 * .getElementsByTagName("TAX").item(0).getFirstChild
+						 * ().getNodeValue()); System.out.println("TERRITORY: "
+						 * + price.getElementsByTagName("TERRITORY").item(0).
+						 * getFirstChild().getNodeValue());
 						 */
 						// compute sales price (price*1.2)
 						BigDecimal amount = new BigDecimal(price
