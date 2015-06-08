@@ -165,8 +165,8 @@ public class BmecatExport {
 			}
 			//needs to be valid, but no column in framework
 			Element ean = document.createElement("EAN");
-			if (product.getOrderNumberCustomer().length() > 14) {
-				String s = product.getOrderNumberCustomer().trim()
+			if (product.getOrderNumberSupplier().length() > 14) {
+				String s = product.getOrderNumberSupplier().trim()
 						.substring(0, 14);
 				ean.appendChild(document.createTextNode(s));
 			} else {

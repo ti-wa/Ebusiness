@@ -71,6 +71,7 @@ public class BmecatOperations {
 				existingSupplier = existingSupplier.trim();
 				System.out.println(existingSupplier);
 				if (existingSupplier.contentEquals(supplier)) {
+					//for later use in import => writeXmlToDatabase
 					result.setBoSupplier(boSupp);
 					result.setSupplierExists(true);
 				}
@@ -123,10 +124,18 @@ public class BmecatOperations {
 				 * description_Short); System.out.println("DESCRIPTION_LONG: " +
 				 */
 				// set Product details to bo Object
+				BOSupplier sup = result.getBoSupplier();
+				String supNumber = "";
+				String temp = "";
+				try{
+				temp= sup.getSupplierNumber();
+				supNumber = temp;
+				}catch(Exception e){System.out.println("null -> Supplier Number");}
+				
 
 				BOProduct product = new BOProduct();
 				product.setOrderNumberSupplier(supplier_Aid);
-				product.setOrderNumberCustomer(supplier_Aid);
+				product.setOrderNumberCustomer(supNumber +supplier_Aid);
 				product.setLongDescription(description_Long);
 				product.setLongDescriptionCustomer(description_Long);
 				product.setShortDescription(description_Short);
@@ -135,8 +144,8 @@ public class BmecatOperations {
 				
 				// check if product is still in database
 				BOProduct check = ProductBOA.getInstance()
-						.findByOrderNumberCustomer(
-								product.getOrderNumberCustomer());
+						.findByOrderNumberSupplier(
+								product.getOrderNumberSupplier());
 				if (check != null) {
 					System.out.println(product.getShortDescription()
 							+ " already in DB");
