@@ -160,10 +160,10 @@ public class BmecatExport {
 				Element descriptionLong = document
 						.createElement("DESCRIPTION_LONG");
 				descriptionLong.appendChild(document.createTextNode(product
-						.getShortDescriptionCustomer()));
+						.getLongDescriptionCustomer()));
 				articleDetails.appendChild(descriptionLong);
 			}
-
+			//needs to be valid, but no column in framework
 			Element ean = document.createElement("EAN");
 			if (product.getOrderNumberCustomer().length() > 14) {
 				String s = product.getOrderNumberCustomer().trim()
@@ -174,7 +174,7 @@ public class BmecatExport {
 						.getOrderNumberCustomer()));
 			}
 			articleDetails.appendChild(ean);
-
+			//needs to be valid
 			Element orderUnit = document.createElement("ORDER_UNIT");
 			Element noCuPerOu = document.createElement("NO_CU_PER_OU");
 			orderUnit.appendChild(document.createTextNode("C62"));

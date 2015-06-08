@@ -113,7 +113,7 @@ public class BmecatOperations {
 							.getElementsByTagName("DESCRIPTION_LONG").item(0)
 							.getFirstChild().getNodeValue();
 				} catch (Exception e) {
-					System.out.println("Null in Description Short");
+					System.out.println("Null in Description long");
 				}
 
 				/*
