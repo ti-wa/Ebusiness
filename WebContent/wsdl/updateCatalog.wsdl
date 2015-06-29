@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://htwg.in.ebut.tandem4.webservice.namespace" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://htwg.in.ebut.tandem4.webservice.namespace">
+	<wsdl:types>
+		<xs:schema targetNamespace="http://htwg.in.ebut.tandem4.webservice.namespace" elementFormDefault="qualified">
+			<xs:element name="updateRequest" type="tns:updateRequestType"/>
+			<xs:complexType name="updateRequestType">
+				<xs:sequence>
+					<xs:element name="authentication" type="tns:authenticationType"/>
+					<xs:element name="listOfProducts" type="tns:listOfProductsType"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="authenticationType">
+				<xs:sequence>
+					<xs:element name="wholesalerName" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="wsUser" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="wsPassword" type="xs:string" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="listOfProductsType">
+				<xs:sequence>
+					<xs:element name="supplierProduct" type="tns:supplierProductType" minOccurs="1" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="supplierProductType">
+				<xs:sequence>
+					<xs:element name="supplierAID" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="shortDescription" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="longDescription" type="xs:string" minOccurs="0" maxOccurs="1"/>
+					<xs:element name="price" type="tns:priceType" minOccurs="1" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="priceType">
+				<xs:sequence>
+					<xs:element name="amount" type="xs:decimal" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="currency" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="tax" type="xs:decimal" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="pricetype" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="countryISOCode" type="xs:string" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="lowerBound" type="xs:integer" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:element name="updateFault" type="tns:updateFaultType"/>
+			<xs:complexType name="updateFaultType">
+				<xs:choice>
+					<xs:element name="authenticationFault" type="xs:string"/>
+					<xs:element name="processingFault" type="xs:string"/>
+				</xs:choice>
+			</xs:complexType>
+			<xs:element name="updateResponse" type="tns:updateResponseType"/>
+			<xs:complexType name="updateResponseType">
+				<xs:sequence>
+					<xs:element name="updateDate" type="xs:date" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="listOfModifiedProducts" type="tns:listOfModifiedProductsType" minOccurs="1" maxOccurs="1"/>
+					<xs:element name="listOfUnavaiableProducts" type="tns:listOfUnavaiableProductsType" minOccurs="1" maxOccurs="1"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="listOfModifiedProductsType">
+				<xs:sequence>
+					<xs:element name="supplierProduct" type="tns:supplierProductType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+			<xs:complexType name="listOfUnavaiableProductsType">
+				<xs:sequence>
+					<xs:element name="supplierProduct" type="tns:supplierProductType" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:complexType>
+		</xs:schema>
+	</wsdl:types>
+	<wsdl:message name="updateCatalog_Request">
+		<wsdl:part name="request" element="tns:updateRequest"/>
+	</wsdl:message>
+	<wsdl:message name="updateCatalog_Response">
+		<wsdl:part name="response" element="tns:updateResponse"/>
+	</wsdl:message>
+	<wsdl:message name="updateCatalog_Fault">
+		<wsdl:part name="fault" element="tns:updateFault"/>
+	</wsdl:message>
+	<wsdl:portType name="UpdateCatalogPortType">
+		<wsdl:operation name="updateCatalog">
+			<wsdl:input message="tns:updateCatalog_Request"/>
+			<wsdl:output message="tns:updateCatalog_Response"/>
+			<wsdl:fault name="fault" message="tns:updateCatalog_Fault"/>
+		</wsdl:operation>
+	</wsdl:portType>
+	<wsdl:binding name="updateCatalog_SOAP" type="tns:UpdateCatalogPortType">
+		<soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+		<wsdl:operation name="updateCatalog">
+			<soap12:operation soapAction="urn:#updateCatalog" soapActionRequired="true"/>
+			<wsdl:input>
+				<soap12:body use="literal"/>
+			</wsdl:input>
+			<wsdl:output>
+				<soap12:body use="literal"/>
+			</wsdl:output>
+			<wsdl:fault name="fault">
+				<soap12:fault name="fault" use="literal"/>
+			</wsdl:fault>
+			<fault name="MissingName">
+  <soap:fault name="MissingName" use="literal" /> 
+  </fault>
+		</wsdl:operation>
+	</wsdl:binding>
+	<wsdl:service name="UpdateProduct_WebService">
+		<wsdl:port name="UpdateProduct_SOAP" binding="tns:updateCatalog_SOAP">
+			<soap12:address location="http://ServiceProvider/ServiceLocation/"/>
+		</wsdl:port>
+	</wsdl:service>
+</wsdl:definitions>
