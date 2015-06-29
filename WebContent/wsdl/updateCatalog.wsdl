@@ -93,11 +93,8 @@
 				<soap12:body use="literal"/>
 			</wsdl:output>
 			<wsdl:fault name="fault">
-				<soap12:fault name="fault" use="literal"/>
+				<soap:fault name="fault" use="literal"/>
 			</wsdl:fault>
-			<fault name="MissingName">
-  <soap:fault name="MissingName" use="literal" /> 
-  </fault>
 		</wsdl:operation>
 	</wsdl:binding>
 	<wsdl:service name="UpdateProduct_WebService">
